@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}dashboard{% endblock  %}
+
+{% block content %}
+
+  <div class="column">
+    {% comment %} {% for followed in user.profile.folllows.all %}
+    {% for twitter in followed.user.twitter.all|dictsort:"created_at" %}
+    
+      
+      <div class="box">
+        {{twitter.content}}
+        <span class="is-small has-text-grey-light">
+          {{twitter.created_at}} by {{twitter.user.username}}
+        </span>
+      </div>
+      
+    
+    {% endfor  %}
+  {% endfor  %} {% endcomment %}
+  
+  {% for twitter in twitters %}
+  <div class="box">
+    {{twitter.content}}
+    <span class="is-small has-text-grey-light">
+      {{twitter.created_at}} by {{twitter.user.username}}
+    </span>
+  </div>
+  {% endfor %}
+  </div>
+  <div class="column is-one-third">
+    <div class="block">
+      <a href="{% url 'twitter:profile_list' %}">
+        <button class="button is-dark is-outlined is-fullwidth">all profile</button>
+      </a>
+      <a href="{% url 'twitter:profile' request.user.profile.id %}">
+        <button class="button is-success is-light is-outlined is-fullwidth">my profile</button>
+      </a>
+    </div>
+    <div class="block">
+      <h2 class="title is-2">Add a twitter</h2>
+    </div>
+    <div class="block">
+      <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type='submit' class="button is-success is-fullwidth is-medium mt-5">Twitter</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock  %}

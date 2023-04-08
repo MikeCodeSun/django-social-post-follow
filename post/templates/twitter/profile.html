@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}profile{% endblock  %}
+{% block content %}
+<div class="column">
+  <div class="block">
+    <h1 class="title is-1">
+      {{profile.user.username|upper}}'s twitter
+    </h1>
+    <div>
+      <form method='post'>
+        {% csrf_token %}
+        <div class="buttons has-addons">
+          {% if profile in user.profile.folllows.all %}
+          <button class="button is-success is-static">Follow</button>
+          <button class="button is-danger" name='follow' value='unfollow'>Unfollow</button>
+          {% else %}
+          <button class="button is-success" name='follow' value='follow'>Follow</button>
+          <button class="button is-danger is-static">Unfollow</button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="content">
+    {% for twitter in profile.user.twitter.all  %}
+    <div class="box">
+      {{twitter.content}}
+      <span class="is-small has-text-grey-light">
+        {{twitter.created_at}}
+      </span>
+    </div>
+    {% endfor  %}
+  </div>
+</div>
+<div class="column is-one-third">
+  <div class="block">
+    <a href="{% url 'twitter:profile_list'  %}">
+      <button class="button is-dark is-outlined is-fullwidth">All profile</button>
+    </a>
+  </div>
+  <div class="block">
+    <h3 class="title is-4">
+      {{profile.user.username}} follows:
+    </h3>
+    <div class="content">
+    <ul>
+      {% for follow in profile.folllows.all %}
+      <li>
+        <a href="{% url 'twitter:profile' follow.id %}">
+          {{follow}}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
+  <div class="block">
+    <h3 class="title is-4">
+      {{profile.user.username}} is followed by:
+    </h3>
+    <div class="content">
+      <ul>
+        {% for follower in profile.follow_by.all %}
+          <li>
+            <a href="{% url 'twitter:profile' follower.id %}">
+              {{follower}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+  {% comment %} {% for f in profile.folllows.all %}
+    <li>{{f}}</li>
+  {% endfor %} {% endcomment %}
+{% endblock  %}
